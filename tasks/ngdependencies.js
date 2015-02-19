@@ -4,6 +4,7 @@ var esprima = require('esprima');
 var escodegen = require('escodegen');
 var astral = require('astral')();
 var traverse = require('traverse');
+var _ = require('_');
 
 module.exports = function (grunt) {
 

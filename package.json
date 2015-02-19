@@ -25,6 +25,7 @@
     "escodegen": "^1.6.1",
     "esprima": "^2.0.0",
     "grunt": "^0.4.5",
-    "traverse": "^0.6.6"
+    "traverse": "^0.6.6",
+    "underscore": "^1.7.0"
   }
 }

@@ -1,0 +1,30 @@
+{
+  "name": "grunt-ngdependencies",
+  "version": "0.1.0",
+  "description": "Detects unused angular injected dependencies",
+  "main": "tasks/ngdependencies.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GlobantMobileStudio/grunt-ngdependencies.git"
+  },
+  "keywords": [
+    "angular dependencies",
+    "unused dependencies"
+  ],
+  "author": "Andres Sainz (andres.sainz@globant.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GlobantMobileStudio/grunt-ngdependencies/issues"
+  },
+  "homepage": "https://github.com/GlobantMobileStudio/grunt-ngdependencies",
+  "dependencies": {
+    "astral": "^0.1.0",
+    "escodegen": "^1.6.1",
+    "esprima": "^2.0.0",
+    "grunt": "^0.4.5",
+    "traverse": "^0.6.6"
+  }
+}

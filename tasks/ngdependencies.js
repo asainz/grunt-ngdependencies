@@ -40,6 +40,15 @@ module.exports = function (grunt) {
         traverse(ast).forEach(function (node) {
             if( node && typeof node === 'object' && node.type ){
 
+                // targets: $resource() -> $resource will be set as used
+                if( node.type === 'CallExpression' && node.callee.type === 'Identifier' ){
+                    var identifierName = node.callee.name;
+                    if( usedDependencies.indexOf(identifierName) === -1 ){
+                        usedDependencies.push(identifierName);
+                    }
+                }
+
+                // targets: myModule.something -> myModule will be set as used
                 if( node.type === 'CallExpression' && node.callee.type === 'MemberExpression' ){
                     var calleeName = node.callee.object.name;
                     if( usedDependencies.indexOf(calleeName) === -1 ){
@@ -47,6 +56,7 @@ module.exports = function (grunt) {
                     }
                 }
 
+                // targets: name = myModule.name -> myModule will be set as used
                 if( node.type === 'MemberExpression' ){
                     var memberName = node.object.name;
                     if( usedDependencies.indexOf(memberName) === -1 ){

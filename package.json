@@ -22,6 +22,7 @@
   "homepage": "https://github.com/GlobantMobileStudio/grunt-ngdependencies",
   "dependencies": {
     "astral": "^0.1.0",
+    "chalk": "^0.5.1",
     "escodegen": "^1.6.1",
     "esprima": "^2.0.0",
     "grunt": "^0.4.5",

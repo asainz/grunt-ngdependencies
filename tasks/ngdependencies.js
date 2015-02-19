@@ -5,6 +5,7 @@ var escodegen = require('escodegen');
 var astral = require('astral')();
 var traverse = require('traverse');
 var _ = require('underscore');
+var chalk = require('chalk');
 
 module.exports = function (grunt) {
 
@@ -80,12 +81,9 @@ module.exports = function (grunt) {
 
 
     grunt.registerMultiTask('ngdependencies', 'Check app for unused dependencies', function () {
-
-        grunt.log.writeln('ngdependencies processing ' + grunt.log.wordlist(this.files.map(function (file) {
-            return file.src;
-        })));
-
         var results = [];
+        var totalUnusedDependencies = 0;
+        var totalFilesWithUnusedDependencies = 0;
 
         this.files.forEach(function (file) {
             var fileContent = file.src.map(grunt.file.read).join('');
@@ -97,16 +95,21 @@ module.exports = function (grunt) {
                     dependencies: unusedDependencies,
                     file: file.src
                 });
+                totalUnusedDependencies += unusedDependencies.length;
+                totalFilesWithUnusedDependencies += 1;
             }
         });
 
         _.each(results, function(result){
-            grunt.log.writeln( result.file );
-            grunt.log.writeln( result.dependencies );
+            grunt.log.writeln( chalk.magenta('Processing: ') + result.file );
+            grunt.log.writeln( chalk.magenta('You have to remove: ') + result.dependencies );
+            grunt.log.writeln('\n');
         });
 
         if( results.length > 0 ){
-            grunt.log.writeln('Please remove the dependencies mentioned above.'['red']);
+            var finalResult = 'You have ' + totalUnusedDependencies + ' unused dependencies in ' + totalFilesWithUnusedDependencies + ' files. \n';
+            grunt.log.writeln( chalk.red(finalResult) );
+
             return false;
         }
 

@@ -7,19 +7,49 @@ var traverse = require('traverse');
 var _ = require('underscore');
 var chalk = require('chalk');
 
+var utils = {
+    isSameArray: function(r1, r2){
+        var sameArray = true;
+
+        r1.sort();
+        r2.sort();
+
+        _.each(r1, function(value, index){
+            if( value !== r2[index] ){
+                sameArray = false;
+            }
+        });
+
+        return sameArray;
+    }
+};
+
 module.exports = function (grunt) {
+
+    function isMainFunctionParamNode(fnParamsRanges, nodeRange){
+        var isParamNode = false;
+
+        _.each(fnParamsRanges, function(paramRange){
+            if( !isParamNode ){
+                isParamNode = utils.isSameArray(nodeRange, paramRange);
+            }
+        });
+
+        return isParamNode;
+    }
 
     function getUnusedDependencies(inputCode){
         var ast = esprima.parse(inputCode, {
             tolerant: true,
             comment: true,
             range: true,
-            tokens: true
+            tokens: false
         });
 
         var isFirstFunctionExpression = true;
         var fn;
         var fnParams;
+        var fnParamsRanges;
 
         traverse(ast).forEach(function (node) {
             if( node && typeof node === 'object' && node.type ){
@@ -35,11 +65,23 @@ module.exports = function (grunt) {
             return param.name;
         });
 
+        // each param has a range array. It's created out of the position in the file and it's unique. We will use it to check if an identifier
+        // is being used in the code or it's just the definition in the main function.
+        fnParamsRanges = _.map(fn.params, function(param){
+            return param.range;
+        });
+
         var usedDependencies = [];
         var unusedDependencies = [];
 
         traverse(ast).forEach(function (node) {
             if( node && typeof node === 'object' && node.type ){
+                // targets: myMethod($window) -> $window will be set as used
+                if( node.type === 'Identifier' && !isMainFunctionParamNode(fnParamsRanges, node.range) ){
+                    if( usedDependencies.indexOf(node.name) === -1 ){
+                        usedDependencies.push(node.name);
+                    }
+                }
 
                 // targets: $resource() -> $resource will be set as used
                 if( node.type === 'CallExpression' && node.callee.type === 'Identifier' ){

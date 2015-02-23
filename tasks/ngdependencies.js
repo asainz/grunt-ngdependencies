@@ -11,6 +11,10 @@ var utils = {
     isSameArray: function(r1, r2){
         var sameArray = true;
 
+        //If both arrays have different length, then they are not the same
+        //so fail fast.
+        if(r1.length !== r2.length) return false;
+
         r1.sort();
         r2.sort();
 

@@ -64,6 +64,9 @@ module.exports = function (grunt) {
             }
         });
 
+        if( !fn ){
+            return [];
+        }
 
         fnParams = _.map(fn.params, function(param){
             return param.name;

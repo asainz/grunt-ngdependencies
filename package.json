@@ -14,7 +14,7 @@
     "angular dependencies",
     "unused dependencies"
   ],
-  "author": "Andres Sainz (andres.sainz@globant.com)",
+  "author": "Andres Sainz (andressainz@gmail.com)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/asainz/grunt-ngdependencies/issues"
